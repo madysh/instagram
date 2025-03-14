@@ -505,4 +505,56 @@ defmodule Instagram.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "followers" do
+    alias Instagram.Accounts.Follower
+
+    import Instagram.AccountsFixtures
+
+    @invalid_attrs %{}
+
+    test "list_followers/0 returns all followers" do
+      follower = follower_fixture()
+      assert Accounts.list_followers() == [follower]
+    end
+
+    test "get_follower!/1 returns the follower with given id" do
+      follower = follower_fixture()
+      assert Accounts.get_follower!(follower.id) == follower
+    end
+
+    test "create_follower/1 with valid data creates a follower" do
+      valid_attrs = %{}
+
+      assert {:ok, %Follower{} = follower} = Accounts.create_follower(valid_attrs)
+    end
+
+    test "create_follower/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_follower(@invalid_attrs)
+    end
+
+    test "update_follower/2 with valid data updates the follower" do
+      follower = follower_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Follower{} = follower} = Accounts.update_follower(follower, update_attrs)
+    end
+
+    test "update_follower/2 with invalid data returns error changeset" do
+      follower = follower_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_follower(follower, @invalid_attrs)
+      assert follower == Accounts.get_follower!(follower.id)
+    end
+
+    test "delete_follower/1 deletes the follower" do
+      follower = follower_fixture()
+      assert {:ok, %Follower{}} = Accounts.delete_follower(follower)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_follower!(follower.id) end
+    end
+
+    test "change_follower/1 returns a follower changeset" do
+      follower = follower_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_follower(follower)
+    end
+  end
 end
