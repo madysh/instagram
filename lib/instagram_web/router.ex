@@ -21,6 +21,9 @@ defmodule InstagramWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/users", UserController, :index
+    post "/users/follow", UserController, :follow
+    post "/users/unfollow", UserController, :unfollow
   end
 
   # Other scopes may use custom stacks.

@@ -14,14 +14,6 @@ defmodule Instagram.Accounts do
     Repo.all(User)
   end
 
-  def get_followed_users(user_id) do
-    Follower
-    |> where([f], f.user_id == ^user_id)
-    |> select([f], f.follower_id)
-    |> Repo.all()
-    |> Enum.map(& &1)  # Returns list of user ids that the current user is following
-  end
-
   @doc """
   Gets a user by email.
 
@@ -464,21 +456,37 @@ defmodule Instagram.Accounts do
     Follower.changeset(follower, attrs)
   end
 
-  def follow_user(user_id, follower_id) do
+  def follow!(follower_id, user_id) do
     %Follower{}
     |> Follower.changeset(%{user_id: user_id, follower_id: follower_id})
     |> Repo.insert()
   end
 
-  def unfollow_user(user_id, follower_id) do
-    Repo.get_by(Follower, user_id: user_id, follower_id: follower_id)
+  def unfollow!(follower_id, user_id) do
+    get_follower(user_id, follower_id)
     |> case do
       nil -> {:error, :not_found}
       follower -> Repo.delete(follower)
     end
   end
 
-  def list_followers(user_id) do
-    Repo.all(from f in Follower, where: f.user_id == ^user_id)
+  def get_follower(user_id, follower_id) do
+    Repo.get_by(Follower, user_id: user_id, follower_id: follower_id)
+  end
+
+  def following?(user_id, follower_id) do
+    Instagram.Repo.exists?(
+      from(f in Follower,
+        where: f.user_id == ^follower_id and f.follower_id == ^user_id
+      )
+    )
+  end
+
+  def get_following_users(user_id) do
+    Follower
+    |> where([f], f.follower_id == ^user_id)
+    |> select([f], f.user_id)
+    |> Repo.all()
+    |> Enum.map(& &1)
   end
 end
