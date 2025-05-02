@@ -10,7 +10,7 @@ defmodule InstagramWeb.UserController do
     render(conn, "index.html", users: users, current_user: current_user, following_user_ids: following_user_ids)
   end
 
-  def follow(conn, %{"user" => %{"id" => user_id}}) do
+  def follow(conn, %{"user_id" => user_id}) do
     user_id = String.to_integer(user_id)
     current_user = conn.assigns.current_user
 
@@ -33,7 +33,7 @@ defmodule InstagramWeb.UserController do
     end
   end
 
-  def unfollow(conn, %{"user" => %{"id" => user_id}}) do
+  def unfollow(conn, %{"user_id" => user_id}) do
     user_id = String.to_integer(user_id)
     current_user = conn.assigns[:current_user]
 

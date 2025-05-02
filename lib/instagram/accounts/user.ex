@@ -9,8 +9,9 @@ defmodule Instagram.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
 
-    has_many :followers, Instagram.Accounts.Follower, foreign_key: :user_id
+    has_many :followers, Instagram.Accounts.Follower
     has_many :followed, Instagram.Accounts.Follower, foreign_key: :follower_id
+    has_many :posts, Instagram.Posts.Post
 
     timestamps(type: :utc_datetime)
   end

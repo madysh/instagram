@@ -4,6 +4,7 @@
   <tr>
     <th>id</th>
     <th>email</th>
+    <th>Photos</th>
     <th></th>
   </tr>
 
@@ -11,17 +12,16 @@
     <tr>
       <td><%= user.id %></td>
       <td><%= user.email %></td>
+      <td><a href="/users/<%= user.id %>/photos">Photos</a></td>
       <%= if @current_user do %>
         <td>
           <%= cond do %>
             <% Enum.member?(@following_user_ids, user.id) -> %>
-              <%= form_tag "/users/unfollow", method: :post do %>
-                <%= hidden_input :user, :id, value: user.id %>
+              <%= form_tag "/users/#{user.id}/unfollow", method: :post do %>
                 <%= submit "Unfollow" %>
               <% end %>
             <% @current_user.id != user.id -> %>
-              <%= form_tag "/users/follow", method: :post do %>
-                <%= hidden_input :user, :id, value: user.id %>
+              <%= form_tag "/users/#{user.id}/follow", method: :post do %>
                 <%= submit "Follow" %>
               <% end %>
             <% true -> %>

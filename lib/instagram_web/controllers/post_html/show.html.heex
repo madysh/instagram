@@ -1,0 +1,15 @@
+<.header>
+  Post {@post.id}
+  <:subtitle>This is a post record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/posts/#{@post}/edit"}>
+      <.button>Edit post</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Description">{@post.description}</:item>
+</.list>
+
+<.back navigate={~p"/users/#{@current_user.id}/posts"}>Back to posts</.back>
