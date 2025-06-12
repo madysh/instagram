@@ -40,3 +40,4 @@ npm-debug.log
 *.db-*
 .DS_Store
 
+/priv/static/post_images/

@@ -8,6 +8,9 @@
 </.header>
 
 <.table id="posts" rows={@posts} row_click={&JS.navigate(~p"/posts/#{&1}")}>
+  <:col :let={post} label="Image">
+    <img src={Instagram.Posts.Post.image_url(post)} style="max-height: 80px; max-width: 100px;" />
+  </:col>
   <:col :let={post} label="Description">{post.description}</:col>
   <:action :let={post}>
     <div class="sr-only">

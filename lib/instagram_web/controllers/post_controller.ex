@@ -19,6 +19,7 @@ defmodule InstagramWeb.PostController do
 
   def create(conn, %{"post" => post_params}) do
     current_user = conn.assigns.current_user
+    post_params = Map.put(post_params, "user_id", current_user.id)
 
     case Posts.create_post(post_params) do
       {:ok, post} ->
@@ -45,7 +46,7 @@ defmodule InstagramWeb.PostController do
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    current_user = conn.assigns.current_user
+    # current_user = conn.assigns.current_user
     post = Posts.get_post!(id)
 
     case Posts.update_post(post, post_params) do
@@ -66,6 +67,6 @@ defmodule InstagramWeb.PostController do
 
     conn
     |> put_flash(:info, "Post deleted successfully.")
-    |> redirect(to: ~p"/posts")
+    |> redirect(to: ~p"/users/#{current_user.id}/posts")
   end
 end
