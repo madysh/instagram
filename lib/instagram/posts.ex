@@ -37,6 +37,13 @@ defmodule Instagram.Posts do
   """
   def get_post!(id), do: Repo.get!(Post, id)
 
+  def get_user_post(user_id, post_id) do
+    from(p in Post,
+      where: p.id == ^post_id and p.user_id == ^user_id
+    )
+    |> Instagram.Repo.one!()
+  end
+
   @doc """
   Creates a post.
 

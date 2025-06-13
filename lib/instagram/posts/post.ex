@@ -8,28 +8,24 @@ defmodule Instagram.Posts.Post do
 
   schema "posts" do
     field :description, :string
-    field :user_id, :id
+    belongs_to :user, Instagram.Accounts.User
     field :image, PostImageUploader.Type
+    field :uuid
 
     timestamps(type: :utc_datetime)
   end
 
-  def image_url(post) do
+  def image_url(post, version \\ :original) do
     if post.image do
-      PostImageUploader.url({post.image, post}, :original)
+      PostImageUploader.url({post.image, post}, version)
     end
   end
 
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:description, :user_id, :image])
-    |> validate_required([:description, :user_id])
+    |> Map.update(:uuid, Ecto.UUID.generate, fn val -> val || Ecto.UUID.generate end)
+    |> cast(attrs, [:description, :user_id])
+    |> cast_attachments(attrs, [:image])
+    |> validate_required([:description, :user_id, :image])
   end
-
-  # def update_changeset(post, attrs) do
-  #   post
-  #   |> cast(attrs, [:description, :user_id, :image])
-  #   |> cast_attachments(attrs, [:image])
-  #   |> validate_required([:description, :user_id])
-  # end
 end

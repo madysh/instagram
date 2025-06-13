@@ -34,20 +34,20 @@ defmodule InstagramWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     current_user = conn.assigns.current_user
-    post = Posts.get_post!(id)
+    post = Posts.get_user_post(current_user.id, id)
     render(conn, :show, post: post, current_user: current_user)
   end
 
   def edit(conn, %{"id" => id}) do
     current_user = conn.assigns.current_user
-    post = Posts.get_post!(id)
+    post = Posts.get_user_post(current_user.id, id)
     changeset = Posts.change_post(post)
     render(conn, :edit, post: post, changeset: changeset, current_user: current_user)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    # current_user = conn.assigns.current_user
-    post = Posts.get_post!(id)
+    current_user = conn.assigns.current_user
+    post = Posts.get_user_post(current_user.id, id)
 
     case Posts.update_post(post, post_params) do
       {:ok, post} ->

@@ -9,9 +9,55 @@
 
 <.list>
   <:item title="Image">
-    <img src={Instagram.Posts.Post.image_url(@post)} style="max-height: 80px; max-width: 100px;" />
+    <img
+      src={Instagram.Posts.Post.image_url(@post, :thumb)}
+      class="thumbnail cursor-pointer"
+      onclick={"openImagePopup('#{Instagram.Posts.Post.image_url(@post)}')"}
+    />
   </:item>
   <:item title="Description">{@post.description}</:item>
 </.list>
 
 <.back navigate={~p"/users/#{@current_user.id}/posts"}>Back to posts</.back>
+
+<!-- Modal -->
+<script>
+  function openImagePopup(imageUrl) {
+    const width = 600
+    const height = 600
+    const left = (screen.width / 2) - (width / 2)
+    const top = (screen.height / 2) - (height / 2)
+
+    const popup = window.open("", "ImagePopup",
+      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=no`)
+
+    popup.document.write(`
+      <html>
+        <head>
+          <title>Image Preview</title>
+          <style>
+            body {
+              margin: 0;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+            }
+            img {
+              max-width: 90vw;
+              max-height: 80vh;
+              border-radius: 8px;
+              box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${imageUrl}" />
+        </body>
+      </html>
+    `)
+
+    popup.document.close()
+  }
+</script>
