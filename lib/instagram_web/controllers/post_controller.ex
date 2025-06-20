@@ -8,7 +8,7 @@ defmodule InstagramWeb.PostController do
 
   def index(conn, %{"user_id" => user_id}) do
     user = Accounts.get_user(user_id) |> Repo.preload(:posts)
-    render(conn, :index, posts: user.posts, user: user)
+    render(conn, :index, posts: user.posts, user: user, user_id: user_id)
   end
 
   def new(conn, _params) do
@@ -34,7 +34,7 @@ defmodule InstagramWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     current_user = conn.assigns.current_user
-    post = Posts.get_user_post(current_user.id, id)
+    post = Posts.get_post!(id)
     render(conn, :show, post: post, current_user: current_user)
   end
 

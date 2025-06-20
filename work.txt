@@ -1,0 +1,42 @@
+
+https://www.youtube.com/watch?v=VjPzVvvRhdM
+https://www.youtube.com/watch?v=4h3ppNeBVYc
+https://www.youtube.com/watch?v=cOzb2Qq40dU
+https://www.youtube.com/watch?v=vcloTJ01up8
+https://www.youtube.com/watch?v=VjPzVvvRhdM
+https://www.youtube.com/watch?v=4h3ppNeBVYc
+
+mix do clean, deps.get, compile
+
+
+1. user registration
+2. add/remove friends
+
+
+3. post picture with description
+4. post likes counters
+5. comments on posts
+
+
+mix phx.new instagram --database sqlite3
+cd instagram && mix deps.get
+mix ecto.create && mix ecto.migrate
+
+
+1. user registration
+mix phx.gen.auth Accounts User users --web Warehouse
+mix deps.get
+mix phx.server
+
+
+2. add/remove friends
+mix phx.gen.context Accounts Follower followers user_id:references:users follower_id:references:users
+mix ecto.migrate
+
+
+3. post picture with description
+mix phx.gen.html Posts Post posts user_id:references:users description:string
+mix ecto.migrate
+
+mix phx.gen.waffle PostImageUploader
+mix ecto.gen.migration add_uuid_to_posts

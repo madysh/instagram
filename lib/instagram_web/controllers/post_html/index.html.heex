@@ -1,9 +1,14 @@
+<% is_owner = @current_user && @current_user.id == String.to_integer(@user_id) %>
+
 <.header>
   Listing Posts
+
   <:actions>
-    <.link href={~p"/posts/new"}>
-      <.button>New Post</.button>
-    </.link>
+    <%= if is_owner do %>
+      <.link href={~p"/posts/new"}>
+        <.button>New Post</.button>
+      </.link>
+    <% end %>
   </:actions>
 </.header>
 
@@ -13,14 +18,13 @@
   </:col>
   <:col :let={post} label="Description">{post.description}</:col>
   <:action :let={post}>
-    <div class="sr-only">
-      <.link navigate={~p"/posts/#{post}"}>Show</.link>
-    </div>
-    <.link navigate={~p"/posts/#{post}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={post}>
-    <.link href={~p"/posts/#{post}"} method="delete" data-confirm="Are you sure?">
-      Delete
-    </.link>
+    <%= if is_owner do %>
+      <.link navigate={~p"/posts/#{post}/edit"}>Edit</.link>
+      <.link href={~p"/posts/#{post}"} method="delete" data-confirm="Are you sure?">
+        Delete
+      </.link>
+    <% end %>
   </:action>
 </.table>
+
+<a href="javascript:window.history.back()">Back</a>

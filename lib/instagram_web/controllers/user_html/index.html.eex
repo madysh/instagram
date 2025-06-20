@@ -12,7 +12,7 @@
     <tr>
       <td><%= user.id %></td>
       <td><%= user.email %></td>
-      <td><a href="/users/<%= user.id %>/photos">Photos</a></td>
+      <td><a href="/users/<%= user.id %>/posts">Posts</a></td>
       <%= if @current_user do %>
         <td>
           <%= cond do %>
@@ -31,3 +31,5 @@
     </tr>
   <% end %>
 </table>
+
+<a href="javascript:window.history.back()">Back</a>

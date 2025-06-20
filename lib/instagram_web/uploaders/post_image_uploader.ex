@@ -5,10 +5,10 @@ defmodule Instagram.Uploaders.PostImageUploader do
   @extension_whitelist ~w(.jpg .jpeg .png .webp)
   @versions [:original, :thumb]
 
-  # Define a thumbnail transformation:
-  def transform(:thumb, _) do
-    {:convert, "-strip -thumbnail 150x150^ -gravity center -extent 150x150"}
-  end
+  # # Define a thumbnail transformation:
+  # def transform(:thumb, _) do
+  #   {:convert, "-strip -thumbnail 150x150^ -gravity center -extent 150x150"}
+  # end
 
   # Override the persisted filenames:
   def filename(version, {_file, scope}) do

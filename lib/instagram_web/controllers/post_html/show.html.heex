@@ -1,9 +1,15 @@
 <.header>
   Post {@post.id}
+  <%= if @current_user && @current_user.id == @post.user_id do %>
+    <.link href={~p"/users/#{@current_user.id}/posts"}>My Posts</.link>
+  <% end %>
+
   <:actions>
-    <.link href={~p"/posts/#{@post}/edit"}>
-      <.button>Edit post</.button>
-    </.link>
+    <%= if @current_user && @current_user.id == @post.user_id do %>
+      <.link href={~p"/posts/#{@post}/edit"}>
+        <.button>Edit post</.button>
+      </.link>
+    <% end %>
   </:actions>
 </.header>
 
@@ -18,7 +24,7 @@
   <:item title="Description">{@post.description}</:item>
 </.list>
 
-<.back navigate={~p"/users/#{@current_user.id}/posts"}>Back to posts</.back>
+<a href="javascript:window.history.back()">Back</a>
 
 <!-- Modal -->
 <script>

@@ -1,0 +1,13 @@
+<ol>
+  <li><a href='/users'>Users</a></li>
+  <%= if @current_user do %>
+    <.link href={~p"/users/#{@current_user.id}/posts"}>My Posts</.link>
+  <% end %>
+</ol>
+
+<.table id="posts" rows={@posts} row_click={&JS.navigate(~p"/posts/#{&1}")}>
+  <:col :let={post}>
+    <img src={Instagram.Posts.Post.image_url(post, :thumb)} style="max-height: 80px; max-width: 100px;" />
+  </:col>
+</.table>
+

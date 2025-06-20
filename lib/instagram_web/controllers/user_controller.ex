@@ -5,8 +5,7 @@ defmodule InstagramWeb.UserController do
   def index(conn, _params) do
     current_user = conn.assigns.current_user
     users = Accounts.list_users()
-    following_user_ids = Accounts.get_following_users(current_user.id)
-
+    following_user_ids = if current_user, do: Accounts.get_following_users(current_user.id), else: []
     render(conn, "index.html", users: users, current_user: current_user, following_user_ids: following_user_ids)
   end
 
