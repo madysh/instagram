@@ -6,12 +6,7 @@ defmodule InstagramWeb.CommentController do
 
   def create(conn, %{"post_id" => post_id, "comment" => comment_params}) do
     current_user = conn.assigns.current_user
-    # comment_params = Map.merge(comment_params, %{"post_id" => post_id, "user_id" => current_user.id})
-
-  comment_params =
-    comment_params
-    |> Map.merge(%{"post_id" => post_id, "user_id" => current_user.id})
-    |> IO.inspect(label: "Comment Params")
+    comment_params = Map.merge(comment_params, %{"post_id" => post_id, "user_id" => current_user.id})
 
     case Posts.create_comment(comment_params) do
       {:ok, _comment} ->
@@ -30,6 +25,6 @@ defmodule InstagramWeb.CommentController do
 
     conn
     |> put_flash(:info, "Comment deleted successfully.")
-    |> redirect(to: ~p"/")
+    |> redirect(to: ~p"/posts/#{comment.post_id}")
   end
 end
