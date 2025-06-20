@@ -34,8 +34,9 @@ defmodule InstagramWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     current_user = conn.assigns.current_user
-    post = Posts.get_post!(id)
-    render(conn, :show, post: post, current_user: current_user)
+    post = Posts.get_post!(id) |> Repo.preload(:user)
+    liked = if current_user, do: Posts.likes?(id, current_user.id), else: false
+    render(conn, :show, post: post, current_user: current_user, liked: liked)
   end
 
   def edit(conn, %{"id" => id}) do

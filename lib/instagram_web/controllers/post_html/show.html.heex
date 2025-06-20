@@ -5,15 +5,29 @@
   <% end %>
 
   <:actions>
-    <%= if @current_user && @current_user.id == @post.user_id do %>
-      <.link href={~p"/posts/#{@post}/edit"}>
-        <.button>Edit post</.button>
-      </.link>
+    <%= if @current_user do %>
+      <%= if @current_user.id == @post.user_id do %>
+        <.link href={~p"/posts/#{@post}/edit"}>
+          <.button>Edit post</.button>
+        </.link>
+      <% else %>
+        <%= if @liked do %>
+          <.form :let={f} for={:like} action={~p"/likes/#{@post.id}"} method="delete">
+            <.button>UnLike</.button>
+          </.form>
+        <% else %>
+          <.form :let={f} for={:like} action={~p"/likes/#{@post.id}"} method="post">
+            <.button>Like</.button>
+          </.form>
+        <% end %>
+      <% end %>
     <% end %>
   </:actions>
 </.header>
 
 <.list>
+  <:item title="User"><.link href={~p"/users/#{@post.user.id}/posts"}>{@post.user.email}</.link></:item>
+
   <:item title="Image">
     <img
       src={Instagram.Posts.Post.image_url(@post, :thumb)}
@@ -23,6 +37,7 @@
   </:item>
   <:item title="Description">{@post.description}</:item>
 </.list>
+
 
 <a href="javascript:window.history.back()">Back</a>
 

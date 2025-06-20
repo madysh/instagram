@@ -30,6 +30,9 @@ defmodule InstagramWeb.Router do
       post "/unfollow", UserController, :unfollow, as: :unfollow_user
       get "/posts", PostController, :index, as: :user_posts
     end
+
+    post "/likes/:post_id", LikeController, :create, as: :user_post_like_create
+    delete "/likes/:post_id", LikeController, :delete, as: :user_post_like_delete
   end
 
   # Other scopes may use custom stacks.

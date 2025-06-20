@@ -56,4 +56,56 @@ defmodule Instagram.PostsTest do
       assert %Ecto.Changeset{} = Posts.change_post(post)
     end
   end
+
+  describe "likes" do
+    alias Instagram.Posts.Like
+
+    import Instagram.PostsFixtures
+
+    @invalid_attrs %{}
+
+    test "list_likes/0 returns all likes" do
+      like = like_fixture()
+      assert Posts.list_likes() == [like]
+    end
+
+    test "get_like!/1 returns the like with given id" do
+      like = like_fixture()
+      assert Posts.get_like!(like.id) == like
+    end
+
+    test "create_like/1 with valid data creates a like" do
+      valid_attrs = %{}
+
+      assert {:ok, %Like{} = like} = Posts.create_like(valid_attrs)
+    end
+
+    test "create_like/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Posts.create_like(@invalid_attrs)
+    end
+
+    test "update_like/2 with valid data updates the like" do
+      like = like_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Like{} = like} = Posts.update_like(like, update_attrs)
+    end
+
+    test "update_like/2 with invalid data returns error changeset" do
+      like = like_fixture()
+      assert {:error, %Ecto.Changeset{}} = Posts.update_like(like, @invalid_attrs)
+      assert like == Posts.get_like!(like.id)
+    end
+
+    test "delete_like/1 deletes the like" do
+      like = like_fixture()
+      assert {:ok, %Like{}} = Posts.delete_like(like)
+      assert_raise Ecto.NoResultsError, fn -> Posts.get_like!(like.id) end
+    end
+
+    test "change_like/1 returns a like changeset" do
+      like = like_fixture()
+      assert %Ecto.Changeset{} = Posts.change_like(like)
+    end
+  end
 end

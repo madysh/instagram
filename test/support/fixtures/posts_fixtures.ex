@@ -17,4 +17,18 @@ defmodule Instagram.PostsFixtures do
 
     post
   end
+
+  @doc """
+  Generate a like.
+  """
+  def like_fixture(attrs \\ %{}) do
+    {:ok, like} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> Instagram.Posts.create_like()
+
+    like
+  end
 end

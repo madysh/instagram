@@ -108,4 +108,55 @@ defmodule Instagram.Posts do
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
   end
+
+  alias Instagram.Posts.Like
+
+
+  @doc """
+  Creates a like.
+
+  ## Examples
+
+      iex> create_like(%{field: value})
+      {:ok, %Like{}}
+
+      iex> create_like(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_like(attrs \\ %{}) do
+    %Like{}
+    |> Like.changeset(attrs)
+    |> Repo.insert()
+  end
+
+
+  @doc """
+  Deletes a like.
+
+  ## Examples
+
+      iex> delete_like(like)
+      {:ok, %Like{}}
+
+      iex> delete_like(like)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_like(post_id, user_id) do
+    from(l in Like, where: l.post_id == ^post_id and l.user_id == ^user_id)
+    |> Repo.one()
+    |> case do
+      nil -> {:error, :not_found}
+      like -> Repo.delete(like)
+    end
+  end
+
+  def likes?(post_id, user_id) do
+    Instagram.Repo.exists?(
+      from(f in Like,
+        where: f.user_id == ^user_id and f.post_id == ^post_id
+      )
+    )
+  end
 end
