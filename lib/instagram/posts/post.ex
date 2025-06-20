@@ -8,10 +8,12 @@ defmodule Instagram.Posts.Post do
 
   schema "posts" do
     field :description, :string
-    belongs_to :user, Instagram.Accounts.User
     field :likes_count, :integer, default: 0
     field :image, PostImageUploader.Type
     field :uuid
+
+    belongs_to :user, Instagram.Accounts.User
+    has_many :comments, Instagram.Posts.Comment
 
     timestamps(type: :utc_datetime)
   end

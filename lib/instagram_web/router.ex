@@ -23,7 +23,9 @@ defmodule InstagramWeb.Router do
     get "/", PageController, :home, as: :home
     get "/users", UserController, :index, as: :users
 
-    resources "/posts", PostController, except: [:index]
+    resources "/posts", PostController, except: [:index] do
+      resources "/comments", CommentController, except: [:index]
+    end
 
     scope "/users/:user_id" do
       post "/follow", UserController, :follow, as: :follow_user

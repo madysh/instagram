@@ -3,8 +3,8 @@ defmodule Instagram.Posts.Like do
   import Ecto.Changeset
 
   schema "likes" do
-    field :user_id, :id
-    field :post_id, :id
+    belongs_to :user, Instagram.Accounts.User
+    belongs_to :post, Instagram.Posts.Post
 
     timestamps(type: :utc_datetime)
   end

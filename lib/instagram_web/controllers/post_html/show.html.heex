@@ -12,11 +12,11 @@
         </.link>
       <% else %>
         <%= if @liked do %>
-          <.form :let={f} for={:like} action={~p"/likes/#{@post.id}"} method="delete">
+          <.form for={:like} action={~p"/likes/#{@post.id}"} method="delete">
             <.button>UnLike</.button>
           </.form>
         <% else %>
-          <.form :let={f} for={:like} action={~p"/likes/#{@post.id}"} method="post">
+          <.form for={:like} action={~p"/likes/#{@post.id}"} method="post">
             <.button>Like</.button>
           </.form>
         <% end %>
@@ -39,6 +39,32 @@
   <:item title="Likes">{@post.likes_count}</:item>
 </.list>
 
+<.header>Comments</.header>
+
+<%= if Enum.empty?(@post.comments) do %>
+  <p>No comments yet.</p>
+<% else %>
+  <ul>
+    <%= for comment <- @post.comments do %>
+      <li>
+        <strong><%= comment.user.email %></strong>: <%= comment.body %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+
+<%= if @current_user do %>
+  <.simple_form :let={f} for={@comment_changeset} action={~p"/posts/#{@post.id}/comments"}>
+    <.error :if={@comment_changeset.action}>
+      Oops, something went wrong! Please check the errors below.
+    </.error>
+    <.input field={f[:body]} type="text" label="Body" />
+    <:actions>
+      <.button>Save Comment</.button>
+    </:actions>
+  </.simple_form>
+<% end %>
 
 <a href="javascript:window.history.back()">Back</a>
 
