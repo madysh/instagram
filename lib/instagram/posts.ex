@@ -128,8 +128,15 @@ defmodule Instagram.Posts do
     %Like{}
     |> Like.changeset(attrs)
     |> Repo.insert()
-  end
+    |> case do
+      {:ok, like} ->
+        increment_likes_count(like.post_id)
+        {:ok, like}
 
+      error ->
+        error
+    end
+  end
 
   @doc """
   Deletes a like.
@@ -147,9 +154,26 @@ defmodule Instagram.Posts do
     from(l in Like, where: l.post_id == ^post_id and l.user_id == ^user_id)
     |> Repo.one()
     |> case do
-      nil -> {:error, :not_found}
-      like -> Repo.delete(like)
+      nil ->
+        {:error, :not_found}
+
+      like ->
+        Repo.transaction(fn ->
+          Repo.delete!(like)
+          decrement_likes_count(post_id)
+          {:ok, like}
+        end)
     end
+  end
+
+  defp increment_likes_count(post_id) do
+    from(p in Post, where: p.id == ^post_id)
+    |> Repo.update_all(inc: [likes_count: 1])
+  end
+
+  defp decrement_likes_count(post_id) do
+    from(p in Post, where: p.id == ^post_id)
+    |> Repo.update_all(inc: [likes_count: -1])
   end
 
   def likes?(post_id, user_id) do
